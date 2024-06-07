@@ -1,7 +1,5 @@
 import streamlit as st
 import pandas as pd
-import joblib
-from sklearn.preprocessing import MinMaxScaler
 import pickle
 import calendar
 

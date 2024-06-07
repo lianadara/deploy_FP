@@ -1,6 +1,6 @@
 import streamlit as st
-import predict_FP
-import predict
+import streamlit_fp.predict_FP as predict_FP
+import streamlit_fp.predict as predict
 
 navigation = st.sidebar.selectbox('Select Page:', ('Form Page','File Upload Page'))
 
