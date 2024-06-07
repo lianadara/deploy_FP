@@ -21,26 +21,27 @@ def preprocess_data(df):
         'Sangat Puas': 5
     }
     df['review_value'] = df['review_name'].map(review_mapping)
+    df['name_gender_age'] = df['patient_name'] + '_' + df['gender'] + '_' + df['age'].astype(str)
 
-    # Mengelompokkan dan menghitung total_pasien, total_cost, dan total_revenue
+    # Mengelompokkan dan menghitung total_pasien, revenue, dan profit
     new_df = df.groupby(['branch_name', 'month', 'year']).agg(
-        jumlah_pasien=('id_trx', 'count'),
+        jumlah_pasien=('name_gender_age', 'count'),
         avg_review=('review_value', 'mean'),
         cogs=('cogs', 'sum'),
-        total_cost=('total_cost', 'sum'),
-        total_revenue=('revenue', 'sum')
+        total_revenue=('revenue', 'sum'),
+        total_profit=('profit', 'sum')
     ).reset_index()
 
     # Normalisasi kolom jumlah_pasien, total_revenue, dan avg_review
     scaler = MinMaxScaler()
-    new_df[['jumlah_pasien', 'total_revenue','avg_review']] = scaler.fit_transform(new_df[['jumlah_pasien', 'total_revenue','avg_review']])
+    new_df[['jumlah_pasien', 'total_revenue','total_profit','avg_review']] = scaler.fit_transform(new_df[['jumlah_pasien', 'total_revenue','total_profit','avg_review']])
     # new_df['avg_review'] = new_df['avg_review'] / 5.0  # Mengingatkan bahwa nilai-nilai review telah dipetakan ke skala 1-5
-
+    new_df = new_df[['jumlah_pasien','avg_review', 'total_revenue','total_profit']]
     return new_df
 
 def predict_score(data):
     # Load the pipeline from .pkl file
-    loaded_pipeline = joblib.load('model_pipeline.pkl')
+    loaded_pipeline = joblib.load('model_linear.pkl')
 
     # Preprocess the input data
     processed_data = preprocess_data(data)
