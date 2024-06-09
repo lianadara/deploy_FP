@@ -59,7 +59,7 @@ def run():
             config={
                 "llm": llm,
                 "response_parser": StreamlitResponse,
-                "callback": StreamlitCallback(container),
+                # "callback": StreamlitCallback(container),
             },
         )
 
