@@ -86,22 +86,11 @@ def run():
         )
 
         answer = query_engine.chat(prompt)
-<<<<<<< HEAD
-        if answer is None:
-            st.write("Sorry, I can't answer the question yet")
-        else:
-            st.write("### Response:")
-            st.write(answer)
-
-if __name__ == '__main__':
-    run()
-=======
-        # if answer:
+        # if answer is None:
+        #     st.write("Sorry, I can't answer the question yet")
+        # else:
         #     st.write("### Response:")
         #     st.write(answer)
-        # else:
-        #     st.write("Sorry, I can't answer the question yet")
 
 if __name__ == '__main__':
     run()
->>>>>>> ec762fbc3ed609ee058fc1f57f72435d509d932c
