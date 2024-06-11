@@ -48,8 +48,8 @@ def run():
             year = year+1
         month_name = calendar.month_name[month+1]
 
-        # if predicted_score>1: predicted_score=1
-        # elif predicted_score<0: predicted_score=0
+        if predicted_score>1: predicted_score=1
+        elif predicted_score<0: predicted_score=0
         st.write(f'Performance score for {branch_name} in {month_name} {year} is: {predicted_score*100:.2f}')
 
 if __name__ == '__main__':
