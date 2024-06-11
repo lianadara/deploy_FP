@@ -35,6 +35,8 @@ def preprocess_data(df):
 
     input_data = pd.DataFrame({
         'branch_name': new_df['branch_name'],
+        'month': new_df['month'],
+        'year': new_df['year'],
         'lag_1_avg_review': new_df['avg_review'],
         'lag_1_jumlah_pasien': new_df['jumlah_pasien'],
         'lag_1_total_revenue': new_df['total_revenue'],
@@ -53,18 +55,32 @@ def predict_score(data):
 
     # Extract branch names
     branch_names = processed_data['branch_name']
+    month = processed_data['month']
+    year = processed_data['year']
+
+    num_month = processed_data['month'].shape[0]
+    num_year = processed_data['year'].shape[0]
+
+    for i in range(num_month):
+    # Ubah bulan dan tahun untuk prediksi berikutnya
+        month[i] = month[i] + 1 if month[i] < 12 else 1
+        year[i] = int(year[i]) if month[i] <= 12 else int(year[i] + 1)
 
     # Drop branch_name from the data to be used for prediction
-    prediction_data = processed_data.drop(columns=['branch_name'])
+    prediction_data = processed_data.drop(columns=['branch_name','month','year'])
     
     # Make predictions using the loaded pipeline
     predictions = loaded_pipeline.predict(prediction_data)
+    # print(predictions)
 
     # Combine the branch names with the predictions
     result_df = pd.DataFrame({
         'branch_name': branch_names,
-        'prediction': predictions[:,0]
+        'year': year.astype(int),
+        'month': month,
+        'prediction': predictions
     })
+    # result_df['year'] = pd.to_datetime(result_df['year']).dt.year
     return result_df
 
 def run():
@@ -85,7 +101,7 @@ def run():
         predictions = predict_score(data)
         
         # Show predictions
-        st.write('Predictions:')
+        st.write('Predictions for the next month:')
         st.write(predictions)
 
 if __name__ == '__main__':
