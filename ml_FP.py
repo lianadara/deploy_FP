@@ -40,10 +40,10 @@ def load_data(path):
 def run():
     st.write("# Chat with Mulia Hospital Dataset 🏥")
 
-    df = load_data('cleaned_data.csv')
+    df = load_data('data_month.csv')
 
     with st.expander("🔎 Dataframe Preview"):
-        st.write(df.tail(3))
+        st.write(df.tail(10))
 
     query = st.text_area("🧑‍⚕️ Ask me!")
     container = st.container()
