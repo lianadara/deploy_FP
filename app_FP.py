@@ -1,5 +1,5 @@
 import streamlit as st
-import predict_FP as predict_FP
+import form_page as form_page
 import predict as predict
 import ml_FP as ml
 
