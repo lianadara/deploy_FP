@@ -11,8 +11,6 @@ def preprocess_data(df):
     df['month'] = df['date_out'].dt.month
     df['year'] = df['date_out'].dt.year
 
-    with open('numeric_transformer.pkl', 'rb') as f:
-        loaded_numeric_transformer = pickle.load(f)
 
     # Memetakan nilai-nilai review ke skala yang diinginkan
     review_mapping = {
@@ -35,19 +33,20 @@ def preprocess_data(df):
         total_profit=('profit', 'sum')
     ).reset_index()
 
-    numeric_features = ['month', 'year', 'jumlah_pasien', 'avg_review', 'cogs', 'total_revenue', 'total_profit']
-    new_data_scaled = pd.DataFrame(loaded_numeric_transformer.transform(new_df[numeric_features]),
-                               columns=numeric_features)
-    
-    # new_data_scaled = new_data_scaled[['branch_name','jumlah_pasien','avg_review', 'total_revenue','total_profit']]
-    new_data_scaled_with_branch = pd.concat([new_df[['branch_name']], new_data_scaled], axis=1)
+    input_data = pd.DataFrame({
+        'branch_name': new_df['branch_name'],
+        'lag_1_avg_review': new_df['avg_review'],
+        'lag_1_jumlah_pasien': new_df['jumlah_pasien'],
+        'lag_1_total_revenue': new_df['total_revenue'],
+        'lag_1_total_profit': new_df['total_profit']
+    })
 
     # print(new_data_scaled_with_branch)
-    return new_data_scaled_with_branch
+    return input_data
 
 def predict_score(data):
     # Load the pipeline from .pkl file
-    loaded_pipeline = joblib.load('model_linear.pkl')
+    loaded_pipeline = joblib.load('model_next.pkl')
 
     # Preprocess the input data
     processed_data = preprocess_data(data)
@@ -56,7 +55,7 @@ def predict_score(data):
     branch_names = processed_data['branch_name']
 
     # Drop branch_name from the data to be used for prediction
-    prediction_data = processed_data.drop(columns=['branch_name','month','year','cogs'])
+    prediction_data = processed_data.drop(columns=['branch_name'])
     
     # Make predictions using the loaded pipeline
     predictions = loaded_pipeline.predict(prediction_data)
