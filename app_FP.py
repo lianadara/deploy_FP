@@ -4,10 +4,10 @@ import predict as predict
 import ml_FP as ml
 
 navigation = st.sidebar.selectbox('🔗Select Page:', ('📃Form Page','📂File Upload Page','💬Chatbot Page'))
-st.sidebar.header("Company name")
+st.sidebar.header("by Team 2")
 
 if navigation == '📃Form Page':
-    predict_FP.run()
+    form_page.run()
 elif navigation == '📂File Upload Page':
     predict.run()
 elif navigation == '💬Chatbot Page':
