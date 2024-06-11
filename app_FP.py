@@ -1,7 +1,7 @@
 import streamlit as st
-# import form_page as form_page
-# import predict as predict
-# import ml_FP as ml
+import form_page
+import predict
+import ml_FP
 
 navigation = st.sidebar.selectbox('🔗Select Page:', ('📃Form Page','📂File Upload Page','💬Chatbot Page'))
 st.sidebar.header("by Team 2")
